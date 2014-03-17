@@ -1,3 +1,21 @@
+module Fight
+	def punch(person, strength)
+		if strength <= @strength && @caffeine_level >= 1
+			puts "#{@name} punched #{person.name}!"
+			puts "#{person.name}:"
+			print " #{person.scream}"
+			puts "#{person.name} has been somersalted in the air!" if strength > 5
+			puts "#{person.name} ran away!"
+			@strength -= strength
+			@caffeine_level -= 1
+		elsif strength > @strength
+			puts "Not enough strength! #{@name} needs to rest!"
+		else
+			puts "Not enough caffeine. Drink more coffee!"
+		end
+	end
+end
+
 class Person
 	attr_reader :name
 	attr_accessor :caffeine_level
@@ -30,28 +48,14 @@ class PowerRanger < Person
 		@color = color
 	end
 
-	def punch(person, strength)
-		if strength <= @strength && @caffeine_level >= 1
-			puts "#{@name} punched #{person.name}!"
-			puts "#{person.name}:"
-			print " #{person.scream}"
-			puts "#{person.name} has been somersalted in the air!" if strength > 5
-			puts "#{person.name} ran away!"
-			@strength -= strength
-			@caffeine_level -= 1
-		elsif strength > @strength
-			puts "Not enough strength! #{@name} needs to rest!"
-		else
-			puts "Not enough caffeine. Drink more coffee!"
-		end
-	end
+	include Fight
 
 	def rest
 		@strength += 1
 	end
 
 	def use_megazord(person)
-		if @caffeine_level > 1
+		if @caffeine_level >= 1
 			@strength = 5000
 			puts "Go! Go! Power Rangers!"
 			puts "#{@name} has entered his zord!"
@@ -72,21 +76,7 @@ class EvilNinja < Person
 		@evilness = evilness
 	end
 
-	def punch(person, strength)
-		if strength <= @strength && @caffeine_level >= 1
-			puts "#{@name} punched #{person.name}!"
-			puts "#{person.name}:"
-			print " #{person.scream}"
-			puts "#{person.name} has been somersalted in the air!" if strength > 5
-			puts "#{person.name} ran away!"
-			@strength -= strength
-			@caffeine_level -= 1
-		elsif strength > @strength
-			puts "Not enough strength! #{@name} needs to rest!"
-		else
-			puts "Not enough caffeine. Drink more coffee!"
-		end
-	end
+	include Fight
 
 	def cause_mayhem(person)
 		if @evilness > 5
@@ -96,6 +86,10 @@ class EvilNinja < Person
 		else
 			puts "#{@name} is not evil enough."
 		end
+	end
+
+	def daddy_issues
+		@evilness += 1
 	end
 end
 
@@ -107,6 +101,7 @@ def fight(ranger1, ranger2, ninja1, ninja2, person1, person2)
 	ranger2.punch(ninja1, 2)
 	person2.run(200)
 	ninja2.punch(ranger2, 1)
+	ninja1.daddy_issues
 	ninja1.cause_mayhem(ranger1)
 	ranger2.use_megazord(ninja1)
 	ranger1.drink_coffee
